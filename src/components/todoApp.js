@@ -1,4 +1,7 @@
 import { useState } from "react";
+import Todo from "./todo";
+import './todoApp.css';
+
 
 const TodoApp = () => {
     const [title,setTitle] = useState('');
@@ -17,6 +20,19 @@ const TodoApp = () => {
         }
 
         setTodos([...todos, newTodo]);
+
+        setTitle('');
+    }
+
+    function handleUpdate(id,value){
+        const temp = [...todos];
+        const item = temp.find(item => item.id === id);
+        item.title = value;
+        setTodos(temp);
+    }
+    function handleDelete(id){
+        const temp = todos.filter(item => item.id !== id);
+        setTodos(temp);     
     }
 
     return (
@@ -29,15 +45,17 @@ const TodoApp = () => {
                     value='Create todo'
                     className='buttonCreate'
                 />
-                {title}
             </from>
             <div className="todosContainer">
                 {
                     todos.map(item => (
                         // Agregar siempre q hacemos un recorrido una KEY
-                        <div key={item.id}>
-                            {item.title}
-                        </div>
+                        <Todo 
+                            key={item.id} 
+                            item={item} 
+                            onUpdate={handleUpdate}
+                            onDelete={handleDelete} 
+                        />
                     ))
                 }
             </div>
